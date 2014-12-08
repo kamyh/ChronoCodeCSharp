@@ -25,6 +25,7 @@ namespace FocusChanged.WatchDog
         public FocusWatcher()
         {
             this.isRunning = false;
+            this.timerTick = false;
             this.session = new Session(this);
             new DataStream("");
             this.FormClosed += ownCloseHandler;
@@ -77,6 +78,38 @@ namespace FocusChanged.WatchDog
             Automation.AddAutomationFocusChangedEventHandler(OnFocusChangedHandler);
             Debug.WriteLine("Watching activated");
 
+            //update label if running chk
+            this.counterUp = 0;
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Tick += delegate
+            {
+                if (this.isRunning)
+                {
+                    if (this.timerTick)
+                    {
+                        this.labelTotElapsedTime.Text = sToTime(this.session.getTotElapsedTime() + this.counterUp);
+                    }
+                    else
+                    {
+                        this.labelTotElapsedTime.Text = sToTime(this.session.getTotElapsedTime());
+                    }
+                    this.counterUp++;
+                }
+            };
+            timer.Interval = 1000;
+            timer.Start();
+
+        }
+
+        private string sToTime(int seconds)
+        {
+            TimeSpan t = TimeSpan.FromSeconds(seconds);
+
+            string answer = string.Format("{0:D2}h:{1:D2}m:{2:D2}s",
+                            t.Hours,
+                            t.Minutes,
+                            t.Seconds);
+            return answer;
         }
 
         private void majComboBoxBan()
@@ -115,6 +148,7 @@ namespace FocusChanged.WatchDog
         {
             if (this.isRunning)
             {
+                this.timerTick = false;
                 Debug.WriteLine("Focus changed!");
                 AutomationElement element = src as AutomationElement;
                 if (element != null)
@@ -130,6 +164,8 @@ namespace FocusChanged.WatchDog
 
                         if (isTaskToWatch(process.ProcessName))
                         {
+                            this.counterUp = 0;
+                            this.timerTick = true;
                             this.session.update(process.ProcessName, name, id, process.MachineName);
                         }
                     }
@@ -564,5 +600,7 @@ namespace FocusChanged.WatchDog
         private List<String> itemsFromListBoxWatchedProcess;
         private ToolStripMenuItem shortLogsToolStripMenuItem;
         private Boolean isRunning;
+        private int counterUp;
+        private Boolean timerTick;
     }
 }
