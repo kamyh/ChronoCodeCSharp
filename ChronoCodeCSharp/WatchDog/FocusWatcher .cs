@@ -548,13 +548,9 @@ namespace FocusChanged.WatchDog
         {
             this.session.saveWatchedTasks(parseWatchedProcess());
 
-            String path = "./save.xml";
-            using (FileStream fs = new FileStream(path, FileMode.Create))
-            {
-                XmlSerializer xSer = new XmlSerializer(typeof(Model.Session));
+            Session.serializeToXML(this.session);
 
-                xSer.Serialize(fs, this.session);
-            }
+           
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -564,8 +560,18 @@ namespace FocusChanged.WatchDog
             {
                 XmlSerializer _xSer = new XmlSerializer(typeof(Model.Session));
 
-                var myObject = _xSer.Deserialize(fs);
+                Session myObject = (Session)_xSer.Deserialize(fs);
+
+                this.session = myObject;
             }
+
+            foreach (String s in this.session.arrayListWatchedProcess)
+            {
+                this.itemsFromListBoxWatchedProcess.Add(s);
+            }
+            this.updateListBox();
+
+            //TODO load deserialized object
         }
 
 

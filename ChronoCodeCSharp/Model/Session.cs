@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.IO;
+using System.Collections.Generic;
 
 namespace FocusChanged.Model
 {
@@ -16,7 +18,7 @@ namespace FocusChanged.Model
             this.CurrentTask = null;
             this.previousTask = null;
             this.isRunning = false;
-            this.ListTasks = new ArrayList();
+            this.ListTasks = new List<Task>();
             this.focusWatcher = null;
         }
 
@@ -25,7 +27,7 @@ namespace FocusChanged.Model
             this.CurrentTask = null;
             this.previousTask = null;
             this.isRunning = false;
-            this.ListTasks = new ArrayList();
+            this.ListTasks = new List<Task>();
             this.focusWatcher = focusWatcher;
         }
 
@@ -110,10 +112,28 @@ namespace FocusChanged.Model
             this.arrayListWatchedProcess = arrayListWatchedProcess;
         }
 
+        static public void serializeToXML(Session session)
+        {
+            try
+            {
+
+                XmlSerializer serializer = new XmlSerializer(typeof(Session));
+                TextWriter textWriter = new StreamWriter(@".\save.xml");
+                serializer.Serialize(textWriter, session);
+                textWriter.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
         /** INPUTS **/
         private Task previousTask { get; set; }
         private Task CurrentTask { get; set; }
-        public ArrayList ListTasks { get; set; }
+
+        
+        public List<Task> ListTasks { get; set; }
         public Boolean isRunning;
         public ArrayList watchedTasks { get; set; }
         public ArrayList arrayListWatchedProcess { get; set; }

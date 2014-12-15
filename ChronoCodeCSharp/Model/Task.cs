@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,14 +12,14 @@ namespace FocusChanged.Model
     {
         public Task()
         {
-            this.periods = new ArrayList();
+            this.periods = new List<Period>();
             //this.periods.Add(new Period());
             this.ProcessName = "";
         }
 
         public Task(String ProcessName)
         {
-            this.periods = new ArrayList();
+            this.periods = new List<Period>();
             //this.periods.Add(new Period());
             this.ProcessName = ProcessName;
         }
@@ -43,7 +44,7 @@ namespace FocusChanged.Model
         public String name { get; set; }
         public String machineName { get; set; }
         public String id { get; set; }
-        public ArrayList periods { get; set; }
+        public List<Period> periods { get; set; }
         private Boolean isWatching {get;set;}
     }
 }

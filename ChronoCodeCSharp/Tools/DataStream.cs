@@ -18,7 +18,7 @@ namespace FocusChanged.Tools
             this.filename = filename;
         }
 
-        public void toLogs(ArrayList tasks)
+        public void toLogs(List<Task> tasks)
         {
             TextWriter tw = new StreamWriter(this.filename);
             String line = "";

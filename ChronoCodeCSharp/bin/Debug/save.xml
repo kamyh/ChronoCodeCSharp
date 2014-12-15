@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Session xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <isRunning>false</isRunning>
+  <ListTasks>
+    <Task>
+      <ProcessName>notepad++</ProcessName>
+      <periods>
+        <Period>
+          <startDate>2014-12-15T13:58:49.5148534+01:00</startDate>
+          <endDate>2014-12-15T13:58:51.0441792+01:00</endDate>
+          <elapsedTimeSec>1</elapsedTimeSec>
+          <elapsedTimeMili>529</elapsedTimeMili>
+        </Period>
+      </periods>
+    </Task>
+  </ListTasks>
+  <arrayListWatchedProcess>
+    <anyType xsi:type="xsd:string">Agent</anyType>
+    <anyType xsi:type="xsd:string">Dropbox</anyType>
+    <anyType xsi:type="xsd:string">adb</anyType>
+    <anyType xsi:type="xsd:string">notepad++</anyType>
+  </arrayListWatchedProcess>
+</Session>
