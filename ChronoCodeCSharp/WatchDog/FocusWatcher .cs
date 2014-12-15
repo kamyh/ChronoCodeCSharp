@@ -548,14 +548,36 @@ namespace FocusChanged.WatchDog
         {
             this.session.saveWatchedTasks(parseWatchedProcess());
 
-            Session.serializeToXML(this.session);
+            OpenFileDialog file = new OpenFileDialog();
 
-           
+            file.InitialDirectory = "./";
+            file.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            file.FilterIndex = 2;
+            file.RestoreDirectory = true;
+
+            string path;
+            
+            if (file.ShowDialog() == DialogResult.OK)
+            {
+                path = file.FileName;
+                Session.serializeToXML(this.session,path);
+            } 
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             String path = "./save.xml";
+            OpenFileDialog file = new OpenFileDialog();
+
+            file.InitialDirectory = "./";
+            file.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
+            file.FilterIndex = 2;
+            file.RestoreDirectory = true;
+
+            if (file.ShowDialog() == DialogResult.OK)
+            {
+                path = file.FileName;
+            } 
             using (FileStream fs = new FileStream(path, FileMode.Open))
             {
                 XmlSerializer _xSer = new XmlSerializer(typeof(Model.Session));
@@ -570,8 +592,6 @@ namespace FocusChanged.WatchDog
                 this.itemsFromListBoxWatchedProcess.Add(s);
             }
             this.updateListBox();
-
-            //TODO load deserialized object
         }
 
 

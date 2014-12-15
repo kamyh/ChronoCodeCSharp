@@ -112,13 +112,13 @@ namespace FocusChanged.Model
             this.arrayListWatchedProcess = arrayListWatchedProcess;
         }
 
-        static public void serializeToXML(Session session)
+        static public void serializeToXML(Session session, string path)
         {
             try
             {
 
                 XmlSerializer serializer = new XmlSerializer(typeof(Session));
-                TextWriter textWriter = new StreamWriter(@".\save.xml");
+                TextWriter textWriter = new StreamWriter(path);
                 serializer.Serialize(textWriter, session);
                 textWriter.Close();
             }
