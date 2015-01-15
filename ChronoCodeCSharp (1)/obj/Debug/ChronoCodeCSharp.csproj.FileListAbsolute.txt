@@ -22,3 +22,12 @@ E:\GoogleDrive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsAppli
 E:\GoogleDrive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp\obj\Debug\FocusChanged.view.Logs.resources
 E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\bin\Debug\ChronoCodeCSharp.exe.config
 E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\ChronoCodeCSharp.exe
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\bin\Debug\ChronoCodeCSharp.exe
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\bin\Debug\ChronoCodeCSharp.pdb
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\ChronoCodeCSharp.csprojResolveAssemblyReference.cache
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\FocusChanged.Properties.Resources.resources
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\FocusChanged.view.FormEditBanFile.resources
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\FocusChanged.view.Logs.resources
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\FocusChanged.WatchDog.FocusWatcher.resources
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\ChronoCodeCSharp.csproj.GenerateResource.Cache
+E:\Google Drive\HE-ARC\3eme\3258_IA_et_frameworks\3258.2 DOTNET\WindowsFormsApplication1\ChronoCodeCSharp (1)\obj\Debug\ChronoCodeCSharp.pdb

@@ -6,12 +6,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 
 namespace FocusChanged.Tools
 {
     class DataStream
     {
+        public DataStream()
+        {
+
+        }
 
         public DataStream(String filename)
         {
@@ -95,6 +100,40 @@ namespace FocusChanged.Tools
             TextWriter tw = new StreamWriter(this.filename);
 
             tw.Close();
+        }
+
+        public void exportCsv(Session session)
+        {
+            SaveFileDialog file = new SaveFileDialog();
+
+            file.InitialDirectory = "./";
+            file.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            file.RestoreDirectory = true;
+
+            string filePath;
+
+            if (file.ShowDialog() == DialogResult.OK)
+            {
+                filePath = file.FileName;
+
+                if (!File.Exists(filePath))
+                {
+                    File.Create(filePath).Close();
+                }
+                string delimiter = ";";
+                StringBuilder sb = new StringBuilder();
+
+                foreach(Task t in session.ListTasks)
+                {
+                    foreach(Period p in t.periods)
+                    {
+                        String[] s = new string[] { t.ProcessName, p.startDate.ToString(), p.endDate.ToString(), p.elapsedTimeSec.ToString() };
+                        sb.AppendLine(string.Join(delimiter, s));
+                    }
+                }
+
+                File.WriteAllText(filePath, sb.ToString());
+            }
         }
 
         /** INPUTS **/

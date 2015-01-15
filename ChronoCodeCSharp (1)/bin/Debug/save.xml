@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Session xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <isRunning>false</isRunning>
-  <ListTasks />
+  <ListTasks>
+    <Task>
+      <ProcessName>ChronoCodeCSharp.vshost</ProcessName>
+      <periods>
+        <Period>
+          <startDate>2015-01-15T16:17:26.0777174+01:00</startDate>
+          <endDate>2015-01-15T16:17:33.9276357+01:00</endDate>
+          <elapsedTimeSec>7</elapsedTimeSec>
+          <elapsedTimeMili>849</elapsedTimeMili>
+        </Period>
+        <Period>
+          <startDate>2015-01-15T16:17:44.2617944+01:00</startDate>
+          <endDate>2015-01-15T16:17:55.6814952+01:00</endDate>
+          <elapsedTimeSec>11</elapsedTimeSec>
+          <elapsedTimeMili>419</elapsedTimeMili>
+        </Period>
+      </periods>
+    </Task>
+  </ListTasks>
   <arrayListWatchedProcess>
-    <anyType xsi:type="xsd:string">AlienFusionService</anyType>
     <anyType xsi:type="xsd:string">chrome</anyType>
+    <anyType xsi:type="xsd:string">ChronoCodeCSharp.vshost</anyType>
   </arrayListWatchedProcess>
 </Session>

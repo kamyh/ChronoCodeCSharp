@@ -65,3 +65,4 @@ IdleAWCCApplicationWatcher32
 AWCCApplicationWatcher32
 AWCCApplicationWatcher64
 AWCCServiceController
+AAM Updates Notifier

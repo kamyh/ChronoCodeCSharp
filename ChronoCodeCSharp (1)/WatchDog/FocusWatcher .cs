@@ -54,11 +54,8 @@ namespace FocusChanged.WatchDog
 
         private void ownCloseHandler(object sender, FormClosedEventArgs e)
         {
-            Debug.WriteLine("Closing App");
             DataStream dS = new DataStream("logs.txt");
             dS.toLogs(this.session.ListTasks);
-
-            Debug.WriteLine("Total Time: "+this.session.getTotElapsedTime());
         }
 
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
@@ -76,7 +73,6 @@ namespace FocusChanged.WatchDog
             populateDictionnary();
 
             Automation.AddAutomationFocusChangedEventHandler(OnFocusChangedHandler);
-            Debug.WriteLine("Watching activated");
 
             //update label if running chk
             this.counterUp = 0;
@@ -133,8 +129,6 @@ namespace FocusChanged.WatchDog
                 value = p.ProcessName;
                 key = p.ProcessName;
 
-                Debug.WriteLine("--> "+key);
-
                 if (!this.dicoSelectionCBox.ContainsKey(key))
                 {
                     this.dicoSelectionCBox.Add(key, value);
@@ -149,7 +143,7 @@ namespace FocusChanged.WatchDog
             if (this.isRunning)
             {
                 this.timerTick = false;
-                Debug.WriteLine("Focus changed!");
+                Debug.WriteLine("FOCUS CHANGED");
                 AutomationElement element = src as AutomationElement;
                 if (element != null)
                 {
@@ -158,15 +152,15 @@ namespace FocusChanged.WatchDog
                     int processId = element.Current.ProcessId;
                     using (Process process = Process.GetProcessById(processId))
                     {
-                        Debug.WriteLine("  Name: {0}, Id: {1}, Process: {2}", name, id, process.ProcessName);
-
-                        Debug.WriteLine("====> " + this.itemsFromListBoxWatchedProcess[0] + " " + (process.ProcessName) + "--" + isTaskToWatch(process.ProcessName));
-
                         if (isTaskToWatch(process.ProcessName))
                         {
                             this.counterUp = 0;
                             this.timerTick = true;
                             this.session.update(process.ProcessName, name, id, process.MachineName);
+                        }
+                        else
+                        {
+                            this.session.setPreviousTaskNull();
                         }
                     }
                 }
@@ -177,7 +171,6 @@ namespace FocusChanged.WatchDog
         {
             foreach (String key in this.itemsFromListBoxWatchedProcess)
             {
-                Debug.WriteLine(key);
                 if (key.Equals(pN))
                 {
                     return true;
@@ -189,6 +182,7 @@ namespace FocusChanged.WatchDog
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FocusWatcher));
             this.selectionProcessComboBox = new System.Windows.Forms.ComboBox();
             this.btnBan = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -213,6 +207,7 @@ namespace FocusChanged.WatchDog
             this.btnValidate = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.labelTotElapsedTime = new System.Windows.Forms.Label();
+            this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -272,27 +267,27 @@ namespace FocusChanged.WatchDog
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             // 
             // actionsToolStripMenuItem
@@ -320,7 +315,8 @@ namespace FocusChanged.WatchDog
             // 
             this.informationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.logsToolStripMenuItem,
-            this.shortLogsToolStripMenuItem});
+            this.shortLogsToolStripMenuItem,
+            this.exportCSVToolStripMenuItem});
             this.informationsToolStripMenuItem.Name = "informationsToolStripMenuItem";
             this.informationsToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
             this.informationsToolStripMenuItem.Text = "Informations";
@@ -328,14 +324,14 @@ namespace FocusChanged.WatchDog
             // logsToolStripMenuItem
             // 
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
-            this.logsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.logsToolStripMenuItem.Text = "Detailled Logs";
             this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
             // 
             // shortLogsToolStripMenuItem
             // 
             this.shortLogsToolStripMenuItem.Name = "shortLogsToolStripMenuItem";
-            this.shortLogsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.shortLogsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.shortLogsToolStripMenuItem.Text = "Short Logs";
             this.shortLogsToolStripMenuItem.Click += new System.EventHandler(this.shortLogsToolStripMenuItem_Click);
             // 
@@ -390,7 +386,7 @@ namespace FocusChanged.WatchDog
             this.btnValidate.Name = "btnValidate";
             this.btnValidate.Size = new System.Drawing.Size(75, 23);
             this.btnValidate.TabIndex = 5;
-            this.btnValidate.Text = "Validate";
+            this.btnValidate.Text = "Start";
             this.btnValidate.UseVisualStyleBackColor = true;
             this.btnValidate.Click += new System.EventHandler(this.buttonValidate_Click);
             // 
@@ -413,6 +409,13 @@ namespace FocusChanged.WatchDog
             this.labelTotElapsedTime.TabIndex = 7;
             this.labelTotElapsedTime.Text = "0";
             // 
+            // exportCSVToolStripMenuItem
+            // 
+            this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
+            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exportCSVToolStripMenuItem.Text = "Export CSV";
+            this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_click);
+            // 
             // FocusWatcher
             // 
             this.ClientSize = new System.Drawing.Size(474, 290);
@@ -424,6 +427,7 @@ namespace FocusChanged.WatchDog
             this.Controls.Add(this.btnBan);
             this.Controls.Add(this.selectionProcessComboBox);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FocusWatcher";
             this.menuStrip1.ResumeLayout(false);
@@ -431,6 +435,14 @@ namespace FocusChanged.WatchDog
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void exportCSVToolStripMenuItem_click(object sender, EventArgs e)
+        {
+            DataStream dS = new DataStream();
+            if(this.isRunning)
+                startPause();
+            dS.exportCsv(this.session);
         }
 
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -447,7 +459,6 @@ namespace FocusChanged.WatchDog
 
         private void editBanFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("editBanFileToolStripMenuItem_Click");
             FormEditBanFile fABF = new FormEditBanFile();
 
             fABF.Show();
@@ -469,8 +480,6 @@ namespace FocusChanged.WatchDog
 
             String selectedKey = getkeyFromValue(selectedValue);
 
-            Debug.WriteLine("Selectected Process: " + selectedKey);
-
             this.dSAddBan.addBan(selectedKey);
 
             majComboBoxBan();
@@ -491,17 +500,29 @@ namespace FocusChanged.WatchDog
 
                 updateListBox();
 
-                Debug.WriteLine("ADD Process to Watch");
-
                 this.selectionProcessComboBox.SelectedIndex = 0;
             }
         }
 
         private void buttonValidate_Click(object sender, EventArgs e)
         {
+            startPause();
+        }
+
+        private void startPause()
+        {
             this.session.saveWatchedTasks(parseWatchedProcess());
 
             this.isRunning = !this.isRunning;
+
+            if (this.isRunning)
+            {
+                this.btnValidate.Text = "Pause";
+            }
+            else
+            {
+                this.btnValidate.Text = "Start";
+            }
         }
 
         private ArrayList parseWatchedProcess()
@@ -521,10 +542,10 @@ namespace FocusChanged.WatchDog
             String selectedProcessInListBox = (String)this.listBoxWatchedProcess.SelectedItem;
 
             this.itemsFromListBoxWatchedProcess.Remove(selectedProcessInListBox);
+            majComboBoxBan();
 
             updateListBox();
-
-            Debug.WriteLine(selectedProcessInListBox);
+            populateSelectionProcessComboBox();
         }
 
         private void updateListBox()
@@ -548,11 +569,10 @@ namespace FocusChanged.WatchDog
         {
             this.session.saveWatchedTasks(parseWatchedProcess());
 
-            OpenFileDialog file = new OpenFileDialog();
+            SaveFileDialog file = new SaveFileDialog();
 
             file.InitialDirectory = "./";
             file.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            file.FilterIndex = 2;
             file.RestoreDirectory = true;
 
             string path;
@@ -571,7 +591,6 @@ namespace FocusChanged.WatchDog
 
             file.InitialDirectory = "./";
             file.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
-            file.FilterIndex = 2;
             file.RestoreDirectory = true;
 
             if (file.ShowDialog() == DialogResult.OK)
@@ -627,6 +646,7 @@ namespace FocusChanged.WatchDog
         private ToolStripMenuItem shortLogsToolStripMenuItem;
         private Boolean isRunning;
         private int counterUp;
+        private ToolStripMenuItem exportCSVToolStripMenuItem;
         private Boolean timerTick;
     }
 }

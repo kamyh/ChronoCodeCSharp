@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEditBanFile));
             this.listBanProcess = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -57,6 +58,7 @@
             this.ClientSize = new System.Drawing.Size(569, 278);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBanProcess);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormEditBanFile";
             this.Text = "FormEditBanFile";
             this.ResumeLayout(false);

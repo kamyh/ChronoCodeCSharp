@@ -71,12 +71,13 @@ namespace FocusChanged.Model
                 if(this.previousTask != t)
                 {
                     t.addEntry();
+                    Debug.WriteLine("ADD ENTRY TO TASK " + t.name);
                 }
             }
             else
             {
                 t = new Task(ProcessName);
-                Debug.WriteLine("New Task Created: " + ProcessName);
+                Debug.WriteLine("NEW TASK " + ProcessName);
                 t.addEntry();
                 this.ListTasks.Add(t);
 
@@ -85,7 +86,7 @@ namespace FocusChanged.Model
             if(this.previousTask != null)
             {
                 this.previousTask.closeLastPeriod();
-                Debug.WriteLine("Close Period !");
+                Debug.WriteLine("CLOSE PERIOD");
             }
 
             this.previousTask = t;
@@ -116,7 +117,6 @@ namespace FocusChanged.Model
         {
             try
             {
-
                 XmlSerializer serializer = new XmlSerializer(typeof(Session));
                 TextWriter textWriter = new StreamWriter(path);
                 serializer.Serialize(textWriter, session);
@@ -126,6 +126,17 @@ namespace FocusChanged.Model
             {
                 Debug.WriteLine(ex.ToString());
             }
+        }
+
+        internal void setPreviousTaskNull()
+        {
+            if (this.previousTask != null)
+            {
+                this.previousTask.closeLastPeriod();
+                Debug.WriteLine("CLOSE PERIOD");
+            }
+
+            this.previousTask = null;
         }
 
         /** INPUTS **/
@@ -140,6 +151,8 @@ namespace FocusChanged.Model
 
         [XmlIgnore]
         public WatchDog.FocusWatcher focusWatcher { get; set; }
+
+
 
     }
 }
