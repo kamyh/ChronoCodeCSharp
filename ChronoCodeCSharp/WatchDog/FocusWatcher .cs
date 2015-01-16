@@ -65,7 +65,6 @@ namespace FocusChanged.WatchDog
 
         private void init()
         {
-            
             this.dicoSelectionCBox = new  Dictionary<String,String>();
             this.dSAddBan = new DataStream("ban.txt");
             this.itemsFromListBoxWatchedProcess = new List<String>();
@@ -74,7 +73,6 @@ namespace FocusChanged.WatchDog
 
             Automation.AddAutomationFocusChangedEventHandler(OnFocusChangedHandler);
 
-            //update label if running chk
             this.counterUp = 0;
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Tick += delegate
@@ -135,8 +133,6 @@ namespace FocusChanged.WatchDog
                 }
             }
         }
-
-
 
         private void OnFocusChangedHandler(object src, AutomationFocusChangedEventArgs args)
         {
@@ -434,7 +430,6 @@ namespace FocusChanged.WatchDog
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         private void exportCSVToolStripMenuItem_click(object sender, EventArgs e)
@@ -601,7 +596,7 @@ namespace FocusChanged.WatchDog
             {
                 XmlSerializer _xSer = new XmlSerializer(typeof(Model.Session));
 
-                Session myObject = (Session)_xSer.Deserialize(fs);
+                Session myObject = (Session)_xSer.Deserialize(fs); 
 
                 this.session = myObject;
             }

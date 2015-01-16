@@ -1,2 +1,0 @@
-ChronoCodeCSharp.vshost : 19
-chrome : 22

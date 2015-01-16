@@ -20,8 +20,12 @@
       </periods>
     </Task>
   </ListTasks>
+  <watchedTasks />
   <arrayListWatchedProcess>
     <anyType xsi:type="xsd:string">chrome</anyType>
     <anyType xsi:type="xsd:string">ChronoCodeCSharp.vshost</anyType>
+    <anyType xsi:type="xsd:string">KeePass</anyType>
+    <anyType xsi:type="xsd:string">Skype</anyType>
+    <anyType xsi:type="xsd:string">Telegram</anyType>
   </arrayListWatchedProcess>
 </Session>

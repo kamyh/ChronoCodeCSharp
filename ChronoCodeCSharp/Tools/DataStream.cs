@@ -138,11 +138,6 @@ namespace FocusChanged.Tools
 
         /** INPUTS **/
         private String filename { get; set; }
-
-
-
-
-        
     }
 
 }

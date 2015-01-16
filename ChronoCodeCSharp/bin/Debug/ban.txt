@@ -66,3 +66,18 @@ AWCCApplicationWatcher32
 AWCCApplicationWatcher64
 AWCCServiceController
 AAM Updates Notifier
+adb
+Idle
+nvstreamsvc
+ss_conn_service
+NvBackend
+rads_user_kernel
+sh
+RtkNGUI64
+steamwebhelper
+SteamService
+NvNetworkService
+MDEServer
+SaiMfd
+AcroRd32
+HPNotify
