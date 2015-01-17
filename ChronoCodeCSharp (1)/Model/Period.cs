@@ -16,19 +16,18 @@ namespace FocusChanged.Model
             this.startDate = DateTime.Now;
         }
 
+        /**
+         * Refresh elapsedTimeSec and elapsedTimeMili attributes
+         * 
+         **/
         public void updateElapsedTime()
         {
             TimeSpan span = this.endDate.Subtract(this.startDate);
             this.elapsedTimeSec = span.Seconds;
             this.elapsedTimeMili = span.Milliseconds;
-            Debug.WriteLine("---> " + this.elapsedTimeSec);
-            Debug.WriteLine("---> " + this.elapsedTimeMili);
         }
 
-
-
         /** INUPTS **/
-
         public DateTime startDate {get;set;}
         public DateTime endDate { get; set; }
         public int elapsedTimeSec { get; set; }

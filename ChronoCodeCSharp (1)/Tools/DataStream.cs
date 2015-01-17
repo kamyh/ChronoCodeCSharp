@@ -8,6 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+/**
+ * Hanle all IN/OUT stream of datas
+ * 
+ **/
 
 namespace FocusChanged.Tools
 {
@@ -23,6 +27,10 @@ namespace FocusChanged.Tools
             this.filename = filename;
         }
 
+        /**
+         * List of task to Logs txt file
+         * 
+         **/
         public void toLogs(List<Task> tasks)
         {
             TextWriter tw = new StreamWriter(this.filename);
@@ -46,6 +54,10 @@ namespace FocusChanged.Tools
             tw.Close();
         }
 
+        /**
+         * Deprecated
+         * 
+         **/
         public void processListToTXT(ArrayList processlist)
         {
             TextWriter tw = new StreamWriter(this.filename);
@@ -58,6 +70,10 @@ namespace FocusChanged.Tools
             tw.Close();
         }
 
+        /**
+         * Parse ban.txt file in an ArrayList<>
+         * 
+         **/
         public ArrayList getBannedProcess()
         {
             TextReader tR = new StreamReader(this.filename);
@@ -73,6 +89,10 @@ namespace FocusChanged.Tools
             return bannedProcess;
         }
 
+        /**
+         * add a ban process to ban.txt file
+         * 
+         **/
         public void addBan(String ban)
         {
             using (StreamWriter sw = File.AppendText(this.filename))
@@ -83,6 +103,10 @@ namespace FocusChanged.Tools
             }	
         }
 
+        /**
+         * Get ban process from ban file
+         * 
+         **/
         public void updateBanList(ArrayList processlist)
         {
             TextWriter tw = new StreamWriter(this.filename);
@@ -95,6 +119,10 @@ namespace FocusChanged.Tools
             tw.Close();
         }
 
+        /**
+         * Clear a text file
+         * 
+         **/
         public void resetFile()
         {
             TextWriter tw = new StreamWriter(this.filename);
@@ -102,6 +130,10 @@ namespace FocusChanged.Tools
             tw.Close();
         }
 
+        /**
+         * Export to CSV function
+         * 
+         **/
         public void exportCsv(Session session)
         {
             SaveFileDialog file = new SaveFileDialog();

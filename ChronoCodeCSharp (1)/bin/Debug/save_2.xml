@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Session xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <isRunning>false</isRunning>
+  <ListTasks>
+    <Task>
+      <ProcessName>ChronoCodeCSharp.vshost</ProcessName>
+      <periods>
+        <Period>
+          <startDate>2015-01-16T16:59:37.7335483+01:00</startDate>
+          <endDate>2015-01-16T16:59:50.6384125+01:00</endDate>
+          <elapsedTimeSec>12</elapsedTimeSec>
+          <elapsedTimeMili>904</elapsedTimeMili>
+        </Period>
+        <Period>
+          <startDate>2015-01-16T17:01:45.3291216+01:00</startDate>
+          <endDate>2015-01-16T17:01:52.0970884+01:00</endDate>
+          <elapsedTimeSec>6</elapsedTimeSec>
+          <elapsedTimeMili>767</elapsedTimeMili>
+        </Period>
+        <Period>
+          <startDate>2015-01-16T17:01:53.6741276+01:00</startDate>
+          <endDate>2015-01-16T17:02:03.9964156+01:00</endDate>
+          <elapsedTimeSec>10</elapsedTimeSec>
+          <elapsedTimeMili>322</elapsedTimeMili>
+        </Period>
+        <Period>
+          <startDate>2015-01-16T17:02:08.2239122+01:00</startDate>
+          <endDate>2015-01-16T17:02:11.8956458+01:00</endDate>
+          <elapsedTimeSec>3</elapsedTimeSec>
+          <elapsedTimeMili>671</elapsedTimeMili>
+        </Period>
+        <Period>
+          <startDate>2015-01-16T17:02:13.5892427+01:00</startDate>
+          <endDate>2015-01-16T17:02:15.1482375+01:00</endDate>
+          <elapsedTimeSec>1</elapsedTimeSec>
+          <elapsedTimeMili>558</elapsedTimeMili>
+        </Period>
+      </periods>
+    </Task>
+    <Task>
+      <ProcessName>KeePass</ProcessName>
+      <periods>
+        <Period>
+          <startDate>2015-01-16T17:02:03.9964156+01:00</startDate>
+          <endDate>2015-01-16T17:02:08.2250593+01:00</endDate>
+          <elapsedTimeSec>4</elapsedTimeSec>
+          <elapsedTimeMili>228</elapsedTimeMili>
+        </Period>
+      </periods>
+    </Task>
+  </ListTasks>
+  <watchedTasks />
+  <arrayListWatchedProcess>
+    <anyType xsi:type="xsd:string">chrome</anyType>
+    <anyType xsi:type="xsd:string">ChronoCodeCSharp.vshost</anyType>
+    <anyType xsi:type="xsd:string">Dropbox</anyType>
+    <anyType xsi:type="xsd:string">KeePass</anyType>
+  </arrayListWatchedProcess>
+</Session>

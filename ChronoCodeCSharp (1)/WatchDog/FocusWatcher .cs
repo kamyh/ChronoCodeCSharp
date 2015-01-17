@@ -18,12 +18,18 @@ using FocusChanged.view;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace FocusChanged.WatchDog 
+/**
+ * FocusWatcher Handle the focus applications monitoring
+ * 
+ **/
+
+namespace FocusChanged.WatchDog
 {
     public class FocusWatcher : Form
     {
         public FocusWatcher()
         {
+            Debug.WriteLine("FW");
             this.isRunning = false;
             this.timerTick = false;
             this.session = new Session(this);
@@ -31,16 +37,20 @@ namespace FocusChanged.WatchDog
             this.FormClosed += ownCloseHandler;
             InitializeComponent();
             init();
-
             populateSelectionProcessComboBox();
         }
 
+        /**
+         * Fill the combobox that list all running process
+         * 
+         **/
         private void populateSelectionProcessComboBox()
         {
             this.selectionProcessComboBox.Items.Clear();
             var list = this.dicoSelectionCBox.Values.ToList();
             list.Sort();
 
+            //For user friendly purpose
             this.selectionProcessComboBox.Items.Add("Select a process");
             this.selectionProcessComboBox.Items.Add("----------------");
 
@@ -52,28 +62,25 @@ namespace FocusChanged.WatchDog
             }
         }
 
+        /**
+         * When application close a log file is created
+         * 
+         **/
         private void ownCloseHandler(object sender, FormClosedEventArgs e)
         {
             DataStream dS = new DataStream("logs.txt");
             dS.toLogs(this.session.ListTasks);
         }
 
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        /**
+         * Initialisation
+         * 
+         **/
         private void init()
         {
-            this.dicoSelectionCBox = new  Dictionary<String,String>();
-            this.dSAddBan = new DataStream("ban.txt");
-            this.itemsFromListBoxWatchedProcess = new List<String>();
+            initPart_1();
 
-            populateDictionnary();
-
-            Automation.AddAutomationFocusChangedEventHandler(OnFocusChangedHandler);
-
-            this.counterUp = 0;
+            //Only to display in tha main windows the total elapsed time of all utilisations
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Tick += delegate
             {
@@ -92,9 +99,30 @@ namespace FocusChanged.WatchDog
             };
             timer.Interval = 1000;
             timer.Start();
-
         }
 
+        private void initPart_1()
+        {
+            //list all processes
+            this.dicoSelectionCBox = new Dictionary<String, String>();
+            //list all ban processes store in the ban.txt file
+            this.dSAddBan = new DataStream("ban.txt");
+            //list of all watched processes
+            this.itemsFromListBoxWatchedProcess = new List<String>();
+
+            populateDictionnary();
+
+            //Declaration of the focus change listener
+            Automation.AddAutomationFocusChangedEventHandler(OnFocusChangedHandler);
+
+            this.counterUp = 0;
+            this.labelTotElapsedTime.Text = sToTime(this.session.getTotElapsedTime());
+        }
+
+        /**
+         * convertion seconds to time string
+         * 
+         **/
         private string sToTime(int seconds)
         {
             TimeSpan t = TimeSpan.FromSeconds(seconds);
@@ -106,6 +134,10 @@ namespace FocusChanged.WatchDog
             return answer;
         }
 
+        /**
+         * Update combobox that show all avalaible processes
+         * 
+         **/
         private void majComboBoxBan()
         {
             this.selectionProcessComboBox.Items.Clear();
@@ -115,6 +147,11 @@ namespace FocusChanged.WatchDog
             populateSelectionProcessComboBox();
         }
 
+        /**
+         * get all avalaible processes for selection
+         * take all processes running and remove ban processes
+         * 
+         **/
         private void populateDictionnary()
         {
             ProcessesAnalyser pA = new ProcessesAnalyser();
@@ -134,28 +171,41 @@ namespace FocusChanged.WatchDog
             }
         }
 
+        /**
+         * Program core
+         * Listener on focus changement
+         * 
+         **/
         private void OnFocusChangedHandler(object src, AutomationFocusChangedEventArgs args)
         {
+            //if the user didn't start the recording we do nothing
             if (this.isRunning)
             {
                 this.timerTick = false;
-                Debug.WriteLine("FOCUS CHANGED");
                 AutomationElement element = src as AutomationElement;
                 if (element != null)
                 {
+                    //get focus application process information
                     string name = element.Current.Name;
                     string id = element.Current.AutomationId;
                     int processId = element.Current.ProcessId;
+
+                    //get the process object
                     using (Process process = Process.GetProcessById(processId))
                     {
+                        //if it's in the list of watched process
                         if (isTaskToWatch(process.ProcessName))
                         {
                             this.counterUp = 0;
                             this.timerTick = true;
+                            //update ellement in session
+                            //if first use we have to create a Task to the Session
+                            //if not first use we add a Period to the existing Task
                             this.session.update(process.ProcessName, name, id, process.MachineName);
                         }
                         else
                         {
+                            //if it's a not watched process we set the prevTask attribute from Session object to null
                             this.session.setPreviousTaskNull();
                         }
                     }
@@ -163,6 +213,10 @@ namespace FocusChanged.WatchDog
             }
         }
 
+        /**
+         * Check if the task is in the list of watched process
+         * 
+         **/
         private bool isTaskToWatch(string pN)
         {
             foreach (String key in this.itemsFromListBoxWatchedProcess)
@@ -176,6 +230,10 @@ namespace FocusChanged.WatchDog
             return false;
         }
 
+        /**
+         * Draw and init UI components
+         * 
+         **/
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FocusWatcher));
@@ -194,16 +252,16 @@ namespace FocusChanged.WatchDog
             this.informationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.shortLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetBanFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBanFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listBoxWatchedProcess = new System.Windows.Forms.ListBox();
+            this.listBoxWatchedProcess = new FocusChanged.WatchDog.ImprovedListBox();
             this.btnValidate = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.labelTotElapsedTime = new System.Windows.Forms.Label();
-            this.exportCSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -320,16 +378,23 @@ namespace FocusChanged.WatchDog
             // logsToolStripMenuItem
             // 
             this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
-            this.logsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.logsToolStripMenuItem.Text = "Detailled Logs";
             this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
             // 
             // shortLogsToolStripMenuItem
             // 
             this.shortLogsToolStripMenuItem.Name = "shortLogsToolStripMenuItem";
-            this.shortLogsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.shortLogsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.shortLogsToolStripMenuItem.Text = "Short Logs";
             this.shortLogsToolStripMenuItem.Click += new System.EventHandler(this.shortLogsToolStripMenuItem_Click);
+            // 
+            // exportCSVToolStripMenuItem
+            // 
+            this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
+            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.exportCSVToolStripMenuItem.Text = "Export CSV";
+            this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -370,6 +435,7 @@ namespace FocusChanged.WatchDog
             // 
             // listBoxWatchedProcess
             // 
+            this.listBoxWatchedProcess.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBoxWatchedProcess.FormattingEnabled = true;
             this.listBoxWatchedProcess.Location = new System.Drawing.Point(13, 55);
             this.listBoxWatchedProcess.Name = "listBoxWatchedProcess";
@@ -405,13 +471,6 @@ namespace FocusChanged.WatchDog
             this.labelTotElapsedTime.TabIndex = 7;
             this.labelTotElapsedTime.Text = "0";
             // 
-            // exportCSVToolStripMenuItem
-            // 
-            this.exportCSVToolStripMenuItem.Name = "exportCSVToolStripMenuItem";
-            this.exportCSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exportCSVToolStripMenuItem.Text = "Export CSV";
-            this.exportCSVToolStripMenuItem.Click += new System.EventHandler(this.exportCSVToolStripMenuItem_click);
-            // 
             // FocusWatcher
             // 
             this.ClientSize = new System.Drawing.Size(474, 290);
@@ -430,28 +489,46 @@ namespace FocusChanged.WatchDog
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
+        /**
+         * Export to CSV
+         * 
+         **/
         private void exportCSVToolStripMenuItem_click(object sender, EventArgs e)
         {
             DataStream dS = new DataStream();
-            if(this.isRunning)
+            //we have to stop recording because we have to close the last recording period
+            if (this.isRunning)
                 startPause();
             dS.exportCsv(this.session);
         }
 
+        /**
+         * Logs Display
+         * 
+         **/
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Logs logs = new Logs(this.session,true);
+            Logs logs = new Logs(this.session, true);
             logs.Show();
         }
 
+        /**
+         * Reset Ban list
+         * 
+         **/
         private void resetBanFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.dSAddBan.resetFile();
             majComboBoxBan();
         }
 
+        /**
+         * Open a new windows to edit ban processes list
+         * 
+         **/
         private void editBanFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormEditBanFile fABF = new FormEditBanFile();
@@ -469,6 +546,10 @@ namespace FocusChanged.WatchDog
             return null;
         }
 
+        /**
+         * Ban a process
+         * 
+         **/
         private void btnBan_Click(object sender, EventArgs e)
         {
             String selectedValue = (String)this.selectionProcessComboBox.SelectedItem;
@@ -480,22 +561,45 @@ namespace FocusChanged.WatchDog
             majComboBoxBan();
         }
 
+        /**
+         * Add process button handler
+         * 
+         **/
         private void btnAdd_Click(object sender, EventArgs e)
         {
             String selectedValue = (String)this.selectionProcessComboBox.SelectedItem;
 
+            //Add process to list
+            addProcessToListBox(selectedValue);
+        }
+
+        /**
+         * Add a new process to watch
+         * 
+         **/
+        private void addProcessToListBox(String selectedValue)
+        {
+            //avoid those two value
             if (selectedValue != "Select a process" && selectedValue != "----------------")
             {
                 String selectedKey = getkeyFromValue(selectedValue);
-
+                if (selectedKey == null)
+                {
+                    selectedKey = selectedValue;
+                }
                 this.selectionProcessComboBox.Items.Remove(selectedValue);
-                this.dicoSelectionCBox.Remove(selectedKey);
+                if (this.dicoSelectionCBox.ContainsKey(selectedKey))
+                {
+                    this.dicoSelectionCBox.Remove(selectedKey);
+                }
 
                 this.itemsFromListBoxWatchedProcess.Add(selectedValue);
 
+                //refresh listbox containing list of watched processes
                 updateListBox();
 
                 this.selectionProcessComboBox.SelectedIndex = 0;
+
             }
         }
 
@@ -504,6 +608,10 @@ namespace FocusChanged.WatchDog
             startPause();
         }
 
+        /**
+         * Start/Stop recording watched processes
+         * 
+         **/
         private void startPause()
         {
             this.session.saveWatchedTasks(parseWatchedProcess());
@@ -520,11 +628,15 @@ namespace FocusChanged.WatchDog
             }
         }
 
+        /**
+         * listbox to ArrayList<>
+         * 
+         **/
         private ArrayList parseWatchedProcess()
         {
             ArrayList result = new ArrayList();
 
-            foreach(String s in this.listBoxWatchedProcess.Items)
+            foreach (String s in this.listBoxWatchedProcess.Items)
             {
                 result.Add(s);
             }
@@ -532,9 +644,13 @@ namespace FocusChanged.WatchDog
             return result;
         }
 
+        /**
+         * Remove a watched process from the list
+         * 
+         **/
         private void buttonRemove_Click(object sender, EventArgs e)
         {
-            String selectedProcessInListBox = (String)this.listBoxWatchedProcess.SelectedItem;
+            String selectedProcessInListBox = (string)this.listBoxWatchedProcess.SelectedItem;
 
             this.itemsFromListBoxWatchedProcess.Remove(selectedProcessInListBox);
             majComboBoxBan();
@@ -543,23 +659,55 @@ namespace FocusChanged.WatchDog
             populateSelectionProcessComboBox();
         }
 
+        /**
+         * Refresh ListBox content
+         * 
+         **/
         private void updateListBox()
         {
-            this.listBoxWatchedProcess.Items.Clear();
+            this.listBoxWatchedProcess.Clear();
+            Color color;
 
             foreach (String s in this.itemsFromListBoxWatchedProcess)
             {
                 this.listBoxWatchedProcess.Items.Add(s);
+                color = Color.Black;
+                //Test if process is running on the machine
+                //with save/load systeme, saved processes list can contain inactive process
+                //if it's append we tell that to the user by coloring in grey the process name
+                if (!isActiveProcess(s))
+                {
+                    color = Color.Gray;
+                }
+                this.listBoxWatchedProcess.SetItemColor(this.listBoxWatchedProcess.Items.Count - 1, color);
             }
         }
 
+        /**
+         * Determin if a Process exist on the machine
+         * 
+         **/
+        private bool isActiveProcess(String key)
+        {
+            populateDictionnary();
+            return this.dicoSelectionCBox.ContainsKey(key);
+        }
+
+        /**
+         * Open short logs windows
+         * 
+         **/
         private void shortLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //if second parameters to true it give detailed logs
             Logs logs = new Logs(this.session, false);
             logs.Show();
         }
 
-
+        /**
+         * Save Session in a XML file
+         * 
+         **/
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.session.saveWatchedTasks(parseWatchedProcess());
@@ -571,16 +719,26 @@ namespace FocusChanged.WatchDog
             file.RestoreDirectory = true;
 
             string path;
-            
+
             if (file.ShowDialog() == DialogResult.OK)
             {
                 path = file.FileName;
-                Session.serializeToXML(this.session,path);
-            } 
+                // serialize session object
+                Session.serializeToXML(this.session, path);
+                Debug.WriteLine("SAVE");
+            }
         }
 
+        /**
+         * Load Session from a XML file
+         * 
+         **/
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //have to init application components
+            initPart_1();
+            //init process list
+            populateSelectionProcessComboBox();
             String path = "./save.xml";
             OpenFileDialog file = new OpenFileDialog();
 
@@ -588,24 +746,31 @@ namespace FocusChanged.WatchDog
             file.Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*";
             file.RestoreDirectory = true;
 
+            //load session
             if (file.ShowDialog() == DialogResult.OK)
             {
                 path = file.FileName;
-            } 
-            using (FileStream fs = new FileStream(path, FileMode.Open))
-            {
-                XmlSerializer _xSer = new XmlSerializer(typeof(Model.Session));
 
-                Session myObject = (Session)_xSer.Deserialize(fs); 
+                using (FileStream fs = new FileStream(path, FileMode.Open))
+                {
+                    XmlSerializer _xSer = new XmlSerializer(typeof(Model.Session));
 
-                this.session = myObject;
+                    Session myObject = (Session)_xSer.Deserialize(fs);
+
+                    this.session = myObject;
+                }
+
+                //populate watched processes ListBox
+                foreach (String s in this.session.arrayListWatchedProcess)
+                {
+                    addProcessToListBox(s);
+                }
+
+                this.updateListBox();
+
+                //refresh time display label
+                this.labelTotElapsedTime.Text = sToTime(this.session.getTotElapsedTime());
             }
-
-            foreach (String s in this.session.arrayListWatchedProcess)
-            {
-                this.itemsFromListBoxWatchedProcess.Add(s);
-            }
-            this.updateListBox();
         }
 
 
@@ -615,7 +780,7 @@ namespace FocusChanged.WatchDog
         private ComboBox selectionProcessComboBox;
         private Button btnBan;
         private Button btnAdd;
-        private Dictionary<String,String> dicoSelectionCBox;
+        private Dictionary<String, String> dicoSelectionCBox;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem filesToolStripMenuItem;
         private ToolStripMenuItem newToolStripMenuItem;
@@ -624,7 +789,7 @@ namespace FocusChanged.WatchDog
         private ToolStripMenuItem quitToolStripMenuItem;
         private ToolStripMenuItem optionsToolStripMenuItem;
         private ToolStripMenuItem resetBanFileToolStripMenuItem;
-        private ListBox listBoxWatchedProcess;
+        private ImprovedListBox listBoxWatchedProcess;
         private Button btnValidate;
         private Button btnRemove;
         private DataStream dSAddBan;

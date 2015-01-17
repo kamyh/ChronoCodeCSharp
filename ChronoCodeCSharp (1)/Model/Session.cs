@@ -36,6 +36,10 @@ namespace FocusChanged.Model
             this.focusWatcher = focusWatcher;
         }
 
+        /**
+         * testing task existence
+         * 
+         **/
         private Boolean isExistingTask(String ProcessName)
         {
             for (int i = 0; i < this.ListTasks.Count; i++)
@@ -48,6 +52,10 @@ namespace FocusChanged.Model
             return false;
         }
 
+        /**
+         * get a task by is name
+         * 
+         **/
         private Task getTaskByName(String ProcessName)
         {
             for (int i = 0; i < this.ListTasks.Count; i++)
@@ -60,6 +68,12 @@ namespace FocusChanged.Model
             return null;
         }
 
+        /**
+         * major funtion
+         * if a process is use by user for the first time it create a new task in the session
+         * or create a new period in an existing task
+         * 
+         **/
         public void update(string ProcessName,String name,String id,String MachineName)
         {
             Task t;
@@ -71,27 +85,30 @@ namespace FocusChanged.Model
                 if(this.previousTask != t)
                 {
                     t.addEntry();
-                    Debug.WriteLine("ADD ENTRY TO TASK " + t.name);
                 }
             }
             else
             {
                 t = new Task(ProcessName);
-                Debug.WriteLine("NEW TASK " + ProcessName);
                 t.addEntry();
                 this.ListTasks.Add(t);
-
             }
             
             if(this.previousTask != null)
             {
+                //Close the last period
                 this.previousTask.closeLastPeriod();
-                Debug.WriteLine("CLOSE PERIOD");
             }
 
+            //set prevTask to current task for next update can close th previous task
             this.previousTask = t;
         }
 
+        /**
+         * Calculate the total recorded time
+         * All period of all task in the session
+         * 
+         **/
         public int getTotElapsedTime()
         {
             int totElapsedTime = 0;
@@ -107,12 +124,20 @@ namespace FocusChanged.Model
             return totElapsedTime;
         }
 
+        /**
+         * Save the list of all watched task
+         * 
+         **/
         public void saveWatchedTasks(ArrayList arrayListWatchedProcess)
         {
             this.arrayListWatchedProcess = new ArrayList();
             this.arrayListWatchedProcess = arrayListWatchedProcess;
         }
 
+        /**
+         * Session serialisation in XML form
+         * 
+         **/
         static public void serializeToXML(Session session, string path)
         {
             try
@@ -128,6 +153,11 @@ namespace FocusChanged.Model
             }
         }
 
+        /**
+         * Set previous task to null
+         * Append when user focus on an none watched window
+         * 
+         **/
         internal void setPreviousTaskNull()
         {
             if (this.previousTask != null)

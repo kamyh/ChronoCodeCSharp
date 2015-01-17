@@ -13,22 +13,28 @@ namespace FocusChanged.Model
         public Task()
         {
             this.periods = new List<Period>();
-            //this.periods.Add(new Period());
             this.ProcessName = "";
         }
 
         public Task(String ProcessName)
         {
             this.periods = new List<Period>();
-            //this.periods.Add(new Period());
             this.ProcessName = ProcessName;
         }
 
+        /**
+         * Create a new period
+         * 
+         **/
         public void addEntry()
         {
             this.periods.Add(new Period());
         }
 
+        /**
+         * set a end time of the last period on the periods list
+         * 
+         **/
         public void closeLastPeriod()
         {
             Period p = ((Period)this.periods[this.periods.Count - 1]);
